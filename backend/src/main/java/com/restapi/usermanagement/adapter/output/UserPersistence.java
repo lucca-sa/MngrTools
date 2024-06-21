@@ -5,22 +5,38 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Component;
 
 import com.restapi.usermanagement.adapter.mapper.UserMapper;
+import com.restapi.usermanagement.adapter.output.database.entity.DepartmentEntity;
+import com.restapi.usermanagement.adapter.output.database.entity.UserEntity;
+import com.restapi.usermanagement.adapter.output.database.repository.DepartmentRepository;
 import com.restapi.usermanagement.adapter.output.database.repository.UserRepository;
 import com.restapi.usermanagement.domain.model.UserModel;
+import com.restapi.usermanagement.domain.model.UserRequestModel;
+import com.restapi.usermanagement.port.user.output.CreateUserPort;
 import com.restapi.usermanagement.port.user.output.FindUserByIdPort;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class UserPersistence implements FindUserByIdPort {
+public class UserPersistence implements FindUserByIdPort, CreateUserPort {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
-
+    private final DepartmentRepository departmentRepository;
 
     @Override
     public UserModel findUserInfo(Long userId) {
         return userMapper.toModel(
                 userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found.")));
+    }
+
+    @Override
+    public UserModel create(UserRequestModel model) {
+        UserEntity newUser = userMapper.toEntity(model);
+
+        DepartmentEntity userDepartment = departmentRepository.findById(model.getDepartmentId()).orElseThrow(() -> new NoSuchElementException("Department not found."));
+
+        newUser.setDepartment(userDepartment);
+
+        return userMapper.toModel(userRepository.save(newUser));
     }
 }
