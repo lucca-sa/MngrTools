@@ -13,23 +13,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private String validationError = "Validation Error";
-
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException e) {
-        Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.NOT_FOUND, "Data Not Found.",
-                e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
-    }
+    private final String validationError = "Validation Error";
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> fieldErrors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -42,30 +36,51 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<Object> handleBindException(BindException e) {
+    public ResponseEntity<Map<String, Object>> handleBindException(BindException e) {
         String message = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(buildErrorDetails(HttpStatus.BAD_REQUEST, validationError, message));
+        Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.BAD_REQUEST, validationError, message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
+    public ResponseEntity<Map<String, Object>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
             WebRequest request) {
         String requiredType = ex.getRequiredType().getSimpleName();
         String error = ex.getName() + " should be of type '" + requiredType + "'.";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(buildErrorDetails(HttpStatus.BAD_REQUEST, validationError, error));
+        Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.BAD_REQUEST, validationError, error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<Map<String, Object>> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+        Map<String, String> fieldErrors = new HashMap<>();
+        ex.getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            fieldErrors.put(fieldName, errorMessage);
+        });
+
+        Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.BAD_REQUEST, validationError, fieldErrors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Map<String, Object>> handleNoSuchElementException(NoSuchElementException e) {
+        Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.NOT_FOUND, "Data Not Found.", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<Object> handleNoResourceFoundException(NoResourceFoundException ex, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleNoResourceFoundException(NoResourceFoundException ex,
+            WebRequest request) {
         Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.NOT_FOUND, "Resource Not Found",
                 ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleNoHandlerFoundException(NoHandlerFoundException ex,
+            WebRequest request) {
         Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.NOT_FOUND, "Handler Not Found",
                 ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
