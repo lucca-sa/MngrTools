@@ -21,8 +21,8 @@ public class FindUserByIdController implements FindUserByIdSwagger {
         this.mapper = mapper;
     }
 
-    @GetMapping
     @Override
+    @GetMapping
     public UserResponse getUserInfo(@PathVariable Long userId) {
         return mapper.toResponse(useCase.findUserInfo(userId));
     }

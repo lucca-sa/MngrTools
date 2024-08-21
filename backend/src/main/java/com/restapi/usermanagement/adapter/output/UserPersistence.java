@@ -13,12 +13,13 @@ import com.restapi.usermanagement.domain.model.UserModel;
 import com.restapi.usermanagement.domain.model.UserRequestModel;
 import com.restapi.usermanagement.port.user.output.CreateUserPort;
 import com.restapi.usermanagement.port.user.output.FindUserByIdPort;
+import com.restapi.usermanagement.port.user.output.UpdateUserPort;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class UserPersistence implements FindUserByIdPort, CreateUserPort {
+public class UserPersistence implements FindUserByIdPort, CreateUserPort, UpdateUserPort {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
@@ -33,10 +34,27 @@ public class UserPersistence implements FindUserByIdPort, CreateUserPort {
     public UserModel create(UserRequestModel model) {
         UserEntity newUser = userMapper.toEntity(model);
 
-        DepartmentEntity userDepartment = departmentRepository.findById(model.getDepartmentId()).orElseThrow(() -> new NoSuchElementException("Department not found."));
+        DepartmentEntity userDepartment = departmentRepository.findById(model.getDepartmentId())
+                .orElseThrow(() -> new NoSuchElementException("Department not found."));
 
         newUser.setDepartment(userDepartment);
 
         return userMapper.toModel(userRepository.save(newUser));
+    }
+
+    @Override
+    public UserModel update(Long userId, UserRequestModel model) {
+
+        UserEntity baseUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found."));
+
+        if (model.getDepartmentId() != null) {
+            DepartmentEntity userDepartment = departmentRepository.findById(model.getDepartmentId())
+                    .orElseThrow(() -> new NoSuchElementException("Department not found."));
+            baseUser.setDepartment(userDepartment);
+        }
+
+        userMapper.updateUserFromModel(model, baseUser);
+        return userMapper.toModel(userRepository.save(baseUser));
     }
 }

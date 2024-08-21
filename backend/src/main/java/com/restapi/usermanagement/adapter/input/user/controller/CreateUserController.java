@@ -16,7 +16,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(value = "/api/user", produces = { "application/json" })
 public class CreateUserController implements CreateUserSwagger {
-    
     private final CreateUserUseCase useCase;
     private final UserMapper mapper;
 
@@ -25,8 +24,8 @@ public class CreateUserController implements CreateUserSwagger {
         this.mapper = mapper;
     }
 
-    @PostMapping
     @Override
+    @PostMapping
     public UserResponse postNewUser(@Valid @RequestBody CreateUserRequest request) {
         return mapper.toResponse(useCase.create(mapper.requestToModel(request)));
     }
