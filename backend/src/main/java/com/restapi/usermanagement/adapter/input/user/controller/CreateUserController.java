@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.restapi.usermanagement.adapter.input.user.CreateUserSwagger;
 import com.restapi.usermanagement.adapter.input.user.dto.CreateUserRequest;
 import com.restapi.usermanagement.adapter.input.user.dto.UserResponse;
+import com.restapi.usermanagement.adapter.input.user.swagger.CreateUserSwagger;
 import com.restapi.usermanagement.adapter.mapper.UserMapper;
 import com.restapi.usermanagement.port.user.input.CreateUserUseCase;
 

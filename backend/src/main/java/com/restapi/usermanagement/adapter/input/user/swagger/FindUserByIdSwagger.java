@@ -1,4 +1,4 @@
-package com.restapi.usermanagement.adapter.input.user;
+package com.restapi.usermanagement.adapter.input.user.swagger;
 
 import org.springframework.web.bind.annotation.PathVariable;
 

@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.restapi.usermanagement.adapter.input.user.FindUserByIdSwagger;
 import com.restapi.usermanagement.adapter.input.user.dto.UserResponse;
+import com.restapi.usermanagement.adapter.input.user.swagger.FindUserByIdSwagger;
 import com.restapi.usermanagement.adapter.mapper.UserMapper;
 import com.restapi.usermanagement.port.user.input.FindUserByIdUseCase;
 
