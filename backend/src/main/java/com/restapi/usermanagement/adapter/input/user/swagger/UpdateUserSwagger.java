@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Positive;
 @Tag(name = "Users")
 public interface UpdateUserSwagger {
 
-    @Operation(summary = "Edit an User")
+    @Operation(summary = "Update an User")
     public UserResponse patchUser(@Valid @RequestBody UpdateUserRequest request,
             @PathVariable @Positive(message = "User ID must be valid.") Long userId);
 }
