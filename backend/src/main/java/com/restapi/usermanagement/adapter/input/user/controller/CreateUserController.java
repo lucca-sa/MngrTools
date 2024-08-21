@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.restapi.usermanagement.adapter.input.user.CreateUserSwagger;
 import com.restapi.usermanagement.adapter.input.user.dto.CreateUserRequest;
 import com.restapi.usermanagement.adapter.input.user.dto.UserResponse;
 import com.restapi.usermanagement.adapter.mapper.UserMapper;
@@ -14,7 +15,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/user", produces = { "application/json" })
-public class CreateUserController {
+public class CreateUserController implements CreateUserSwagger {
     
     private final CreateUserUseCase useCase;
     private final UserMapper mapper;
@@ -25,7 +26,8 @@ public class CreateUserController {
     }
 
     @PostMapping
-    public UserResponse findUser(@Valid @RequestBody CreateUserRequest request) {
+    @Override
+    public UserResponse postNewUser(@Valid @RequestBody CreateUserRequest request) {
         return mapper.toResponse(useCase.create(mapper.requestToModel(request)));
     }
 }
