@@ -52,7 +52,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
-    public ResponseEntity<Map<String, Object>> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+    public ResponseEntity<Map<String, Object>> handleHandlerMethodValidationException(
+            HandlerMethodValidationException ex) {
         Map<String, String> fieldErrors = new HashMap<>();
         ex.getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -84,6 +85,13 @@ public class GlobalExceptionHandler {
         Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.NOT_FOUND, "Handler Not Found",
                 ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
+        Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error",
+                ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDetails);
     }
 
     private Map<String, Object> buildErrorDetails(HttpStatus status, String error, Object message) {
