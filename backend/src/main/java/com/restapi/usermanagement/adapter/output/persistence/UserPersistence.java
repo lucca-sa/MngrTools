@@ -2,6 +2,9 @@ package com.restapi.usermanagement.adapter.output.persistence;
 
 import java.util.NoSuchElementException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.restapi.usermanagement.adapter.mapper.UserMapper;
@@ -14,13 +17,15 @@ import com.restapi.usermanagement.domain.model.UserRequestModel;
 import com.restapi.usermanagement.port.user.output.CreateUserPort;
 import com.restapi.usermanagement.port.user.output.DeleteUserPort;
 import com.restapi.usermanagement.port.user.output.FindUserByIdPort;
+import com.restapi.usermanagement.port.user.output.ListUsersPaginatedPort;
 import com.restapi.usermanagement.port.user.output.UpdateUserPort;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class UserPersistence implements FindUserByIdPort, CreateUserPort, UpdateUserPort, DeleteUserPort {
+public class UserPersistence
+        implements FindUserByIdPort, CreateUserPort, UpdateUserPort, DeleteUserPort, ListUsersPaginatedPort {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
@@ -65,5 +70,16 @@ public class UserPersistence implements FindUserByIdPort, CreateUserPort, Update
                 .orElseThrow(() -> new NoSuchElementException("User not found."));
 
         userRepository.deleteById(userId);
+    }
+
+    @Override
+    public Page<UserModel> findUserList(Pageable page, Long userId, String userName, String departmentName) {
+        Page<UserEntity> users = userRepository.findList(userId, userName, departmentName, page);
+
+        if (users.getContent().isEmpty()) {
+            throw new NoSuchElementException("No users found.");
+        }
+
+        return new PageImpl<>(users.stream().map(userMapper::toModel).toList(), page, users.getTotalElements());
     }
 }
