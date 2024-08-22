@@ -1,4 +1,4 @@
-package com.restapi.usermanagement.adapter.output;
+package com.restapi.usermanagement.adapter.output.persistence;
 
 import java.util.NoSuchElementException;
 
