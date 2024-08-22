@@ -12,6 +12,7 @@ import com.restapi.usermanagement.adapter.output.database.repository.UserReposit
 import com.restapi.usermanagement.domain.model.UserModel;
 import com.restapi.usermanagement.domain.model.UserRequestModel;
 import com.restapi.usermanagement.port.user.output.CreateUserPort;
+import com.restapi.usermanagement.port.user.output.DeleteUserPort;
 import com.restapi.usermanagement.port.user.output.FindUserByIdPort;
 import com.restapi.usermanagement.port.user.output.UpdateUserPort;
 
@@ -19,7 +20,7 @@ import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class UserPersistence implements FindUserByIdPort, CreateUserPort, UpdateUserPort {
+public class UserPersistence implements FindUserByIdPort, CreateUserPort, UpdateUserPort, DeleteUserPort {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
@@ -56,5 +57,13 @@ public class UserPersistence implements FindUserByIdPort, CreateUserPort, Update
 
         userMapper.updateUserFromModel(model, baseUser);
         return userMapper.toModel(userRepository.save(baseUser));
+    }
+
+    @Override
+    public void delete(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found."));
+
+        userRepository.deleteById(userId);
     }
 }
