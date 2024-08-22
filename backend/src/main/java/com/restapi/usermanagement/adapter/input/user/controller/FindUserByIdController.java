@@ -11,7 +11,7 @@ import com.restapi.usermanagement.adapter.mapper.UserMapper;
 import com.restapi.usermanagement.port.user.input.FindUserByIdUseCase;
 
 @RestController
-@RequestMapping(value = "/api/user/{userId}", produces = { "application/json" })
+@RequestMapping(value = "/api/user", produces = { "application/json" })
 public class FindUserByIdController implements FindUserByIdSwagger {
     private final FindUserByIdUseCase useCase;
     private final UserMapper mapper;
@@ -22,7 +22,7 @@ public class FindUserByIdController implements FindUserByIdSwagger {
     }
 
     @Override
-    @GetMapping
+    @GetMapping("/{userId}")
     public UserResponse getUserInfo(@PathVariable Long userId) {
         return mapper.toResponse(useCase.findUserInfo(userId));
     }

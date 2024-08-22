@@ -11,7 +11,7 @@ import com.restapi.usermanagement.adapter.input.user.swagger.DeleteUserSwagger;
 import com.restapi.usermanagement.port.user.input.DeleteUserUseCase;
 
 @RestController
-@RequestMapping(value = "/api/user/{userId}", produces = { "application/json" })
+@RequestMapping(value = "/api/user/", produces = { "application/json" })
 public class DeleteUserController implements DeleteUserSwagger {
     private final DeleteUserUseCase useCase;
 
@@ -20,7 +20,7 @@ public class DeleteUserController implements DeleteUserSwagger {
     }
 
     @Override
-    @DeleteMapping
+    @DeleteMapping("{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         useCase.delete(userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
