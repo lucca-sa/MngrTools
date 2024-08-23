@@ -1,8 +1,12 @@
 package com.restapi.usermanagement.adapter.output.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,35 +22,60 @@ import com.restapi.usermanagement.domain.model.DepartmentRequestModel;
 
 public class DepartmentPersistenceTest {
 
-        @Mock
-        private DepartmentMapper departmentMapper;
+    @Mock
+    private DepartmentMapper departmentMapper;
 
-        @Mock
-        private DepartmentRepository departmentRepository;
+    @Mock
+    private DepartmentRepository departmentRepository;
 
-        @InjectMocks
-        private DepartmentPersistence departmentPersistence;
+    @InjectMocks
+    private DepartmentPersistence departmentPersistence;
 
-        @BeforeEach
-        public void setUp() {
-                MockitoAnnotations.openMocks(this);
-        }
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-        @Test
-        public void testCreate_Success() {
-                DepartmentRequestModel requestModel = new DepartmentRequestModel("HR");
-                DepartmentEntity departmentEntity = new DepartmentEntity(1L, "HR", null);
-                DepartmentModel departmentModel = new DepartmentModel(1L, "HR");
+    @Test
+    public void testCreate_Success() {
+        DepartmentRequestModel requestModel = new DepartmentRequestModel("HR");
+        DepartmentEntity departmentEntity = new DepartmentEntity(1L, "HR", null);
+        DepartmentModel departmentModel = new DepartmentModel(1L, "HR");
 
-                when(departmentMapper.toEntity(requestModel)).thenReturn(departmentEntity);
-                when(departmentRepository.save(departmentEntity)).thenReturn(departmentEntity);
-                when(departmentMapper.toModel(departmentEntity)).thenReturn(departmentModel);
+        when(departmentMapper.toEntity(requestModel)).thenReturn(departmentEntity);
+        when(departmentRepository.save(departmentEntity)).thenReturn(departmentEntity);
+        when(departmentMapper.toModel(departmentEntity)).thenReturn(departmentModel);
 
-                DepartmentModel result = departmentPersistence.create(requestModel);
+        DepartmentModel result = departmentPersistence.create(requestModel);
 
-                verify(departmentMapper).toEntity(requestModel);
-                verify(departmentRepository).save(departmentEntity);
-                verify(departmentMapper).toModel(departmentEntity);
-                assertEquals(departmentModel, result);
-        }
+        verify(departmentMapper).toEntity(requestModel);
+        verify(departmentRepository).save(departmentEntity);
+        verify(departmentMapper).toModel(departmentEntity);
+        assertEquals(departmentModel, result);
+    }
+
+    @Test
+    public void testFindDepartmentInfo_Success() {
+        Long departmentId = 1L;
+        DepartmentEntity departmentEntity = new DepartmentEntity(departmentId, "HR", null);
+        DepartmentModel departmentModel = new DepartmentModel(departmentId, "HR");
+
+        when(departmentRepository.findById(departmentId)).thenReturn(Optional.of(departmentEntity));
+        when(departmentMapper.toModel(departmentEntity)).thenReturn(departmentModel);
+
+        DepartmentModel result = departmentPersistence.findDepartmentInfo(departmentId);
+
+        verify(departmentRepository).findById(departmentId);
+        verify(departmentMapper).toModel(departmentEntity);
+        assertEquals(departmentModel, result);
+    }
+
+    @Test
+    public void testFindDepartmentInfo_DepartmentNotFound() {
+        Long departmentId = 1L;
+
+        when(departmentRepository.findById(departmentId)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> departmentPersistence.findDepartmentInfo(departmentId));
+    }
 }
