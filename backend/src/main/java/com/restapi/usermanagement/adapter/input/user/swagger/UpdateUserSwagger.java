@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.restapi.usermanagement.adapter.exception.ErrorResponse;
 import com.restapi.usermanagement.adapter.input.user.dto.UpdateUserRequest;
-import com.restapi.usermanagement.adapter.input.user.dto.UserResponse;
+import com.restapi.usermanagement.adapter.input.user.dto.User;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,10 +19,10 @@ public interface UpdateUserSwagger {
 
     @Operation(summary = "Update a User")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User updated successfully", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "200", description = "User updated successfully", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = User.class))),
             @ApiResponse(description = "Error", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ErrorResponse.class))),
            
     })
-    public UserResponse patchUser(@Valid @RequestBody UpdateUserRequest request,
+    public User patchUser(@Valid @RequestBody UpdateUserRequest request,
             @PathVariable @Positive(message = "User ID must be valid.") Long userId);
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.restapi.usermanagement.adapter.input.user.dto.UpdateUserRequest;
-import com.restapi.usermanagement.adapter.input.user.dto.UserResponse;
+import com.restapi.usermanagement.adapter.input.user.dto.User;
 import com.restapi.usermanagement.adapter.input.user.swagger.UpdateUserSwagger;
 import com.restapi.usermanagement.adapter.mapper.UserMapper;
 import com.restapi.usermanagement.port.user.input.UpdateUserUseCase;
@@ -28,8 +28,8 @@ public class UpdateUserController implements UpdateUserSwagger {
 
     @Override
     @PatchMapping("/{userId}")
-    public UserResponse patchUser(@Valid @RequestBody UpdateUserRequest request,
+    public User patchUser(@Valid @RequestBody UpdateUserRequest request,
             @PathVariable @Positive(message = "User ID must be valid.") Long userId) {
-        return mapper.toResponse(useCase.update(userId, mapper.requestToModel(request)));
+        return mapper.toResponse(useCase.update(userId, mapper.toModel(request)));
     }
 }

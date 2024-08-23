@@ -1,18 +1,15 @@
-package com.restapi.usermanagement.adapter.input.user.dto;
+package com.restapi.usermanagement.adapter.input.department.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
+public class Department {
     private Long id;
     private String name;
-    private String email;
-    private String phone;
-    private String address;
-    private Department department;
 }
