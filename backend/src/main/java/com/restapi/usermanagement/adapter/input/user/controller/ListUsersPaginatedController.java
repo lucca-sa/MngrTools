@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.restapi.usermanagement.adapter.input.generic.PaginationResponseDTO;
 import com.restapi.usermanagement.adapter.input.user.swagger.ListUsersPaginatedSwagger;
-import com.restapi.usermanagement.adapter.mapper.UserMapper;
+import com.restapi.usermanagement.adapter.mapper.PaginationMapper;
 import com.restapi.usermanagement.port.user.input.ListUsersPaginatedUseCase;
 
 @RestController
 @RequestMapping(value = "/api/user", produces = { "application/json" })
 public class ListUsersPaginatedController implements ListUsersPaginatedSwagger {
     private final ListUsersPaginatedUseCase useCase;
-    private final UserMapper mapper;
+    private final PaginationMapper mapper;
 
-    public ListUsersPaginatedController(ListUsersPaginatedUseCase useCase, UserMapper mapper) {
+    public ListUsersPaginatedController(ListUsersPaginatedUseCase useCase, PaginationMapper mapper) {
         this.useCase = useCase;
         this.mapper = mapper;
     }
