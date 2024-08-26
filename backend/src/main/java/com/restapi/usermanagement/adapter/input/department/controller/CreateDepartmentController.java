@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.restapi.usermanagement.adapter.input.department.dto.CreateDepartmentRequest;
+import com.restapi.usermanagement.adapter.input.department.dto.DepartmentRequest;
 import com.restapi.usermanagement.adapter.input.department.dto.Department;
 import com.restapi.usermanagement.adapter.input.department.swagger.CreateDepartmentSwagger;
 import com.restapi.usermanagement.adapter.mapper.DepartmentMapper;
@@ -26,7 +26,7 @@ public class CreateDepartmentController implements CreateDepartmentSwagger {
 
     @Override
     @PostMapping
-    public Department postNewDepartment(@Valid @RequestBody CreateDepartmentRequest request) {
+    public Department postNewDepartment(@Valid @RequestBody DepartmentRequest request) {
         return mapper.toResponse(useCase.create(mapper.toModel(request)));
     }
 }

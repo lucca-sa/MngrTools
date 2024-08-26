@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateDepartmentRequest {
+public class DepartmentRequest {
     @NotBlank(message = "Name is required")
     @Size(max = 70, message = "Name must be at most 70 characters")
     private String name;

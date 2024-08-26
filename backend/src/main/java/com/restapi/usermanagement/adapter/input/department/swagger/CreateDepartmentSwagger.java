@@ -3,7 +3,7 @@ package com.restapi.usermanagement.adapter.input.department.swagger;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.restapi.usermanagement.adapter.exception.ErrorResponse;
-import com.restapi.usermanagement.adapter.input.department.dto.CreateDepartmentRequest;
+import com.restapi.usermanagement.adapter.input.department.dto.DepartmentRequest;
 import com.restapi.usermanagement.adapter.input.department.dto.Department;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,5 +21,5 @@ public interface CreateDepartmentSwagger {
             @ApiResponse(description = "Error", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ErrorResponse.class))),
 
     })
-    public Department postNewDepartment(@Valid @RequestBody CreateDepartmentRequest request);
+    public Department postNewDepartment(@Valid @RequestBody DepartmentRequest request);
 }
