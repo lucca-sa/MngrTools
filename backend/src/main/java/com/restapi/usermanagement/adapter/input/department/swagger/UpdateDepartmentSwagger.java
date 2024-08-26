@@ -18,10 +18,10 @@ import jakarta.validation.constraints.Positive;
 public interface UpdateDepartmentSwagger {
         @Operation(summary = "Update a Department")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "User updated successfully", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = Department.class))),
+                        @ApiResponse(responseCode = "200", description = "Department updated successfully", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = Department.class))),
                         @ApiResponse(description = "Error", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ErrorResponse.class))),
 
         })
         public Department patchDepartment(@Valid @RequestBody DepartmentRequest request,
-                        @PathVariable @Positive(message = "User ID must be valid.") Long departmentId);
+                        @PathVariable @Positive(message = "Department ID must be valid.") Long departmentId);
 }

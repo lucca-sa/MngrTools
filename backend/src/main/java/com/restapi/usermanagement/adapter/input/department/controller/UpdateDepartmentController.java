@@ -29,7 +29,7 @@ public class UpdateDepartmentController implements UpdateDepartmentSwagger {
     @Override
     @PatchMapping("/{departmentId}")
     public Department patchDepartment(@Valid @RequestBody DepartmentRequest request,
-            @PathVariable @Positive(message = "User ID must be valid.") Long departmentId) {
+            @PathVariable @Positive(message = "Department ID must be valid.") Long departmentId) {
         return mapper.toResponse(useCase.update(departmentId, mapper.toModel(request)));
     }
 }
