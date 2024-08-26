@@ -18,9 +18,18 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import com.restapi.usermanagement.adapter.exception.customs.DataConflictException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private final String validationError = "Validation Error";
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
+        Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error",
+                ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDetails);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -87,11 +96,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
-        Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error",
-                ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDetails);
+    @ExceptionHandler(DataConflictException.class)
+    public ResponseEntity<Map<String, Object>> handleDataConflictException(DataConflictException ex) {
+        Map<String, Object> errorDetails = buildErrorDetails(HttpStatus.CONFLICT, "Conflict", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorDetails);
     }
 
     private Map<String, Object> buildErrorDetails(HttpStatus status, String error, Object message) {
