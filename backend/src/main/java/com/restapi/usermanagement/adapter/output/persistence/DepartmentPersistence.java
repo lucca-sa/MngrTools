@@ -2,6 +2,9 @@ package com.restapi.usermanagement.adapter.output.persistence;
 
 import java.util.NoSuchElementException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.restapi.usermanagement.adapter.exception.customs.DataConflictException;
@@ -12,13 +15,15 @@ import com.restapi.usermanagement.domain.model.DepartmentModel;
 import com.restapi.usermanagement.domain.model.DepartmentRequestModel;
 import com.restapi.usermanagement.port.department.output.CreateDepartmentPort;
 import com.restapi.usermanagement.port.department.output.FindDepartmentByIdPort;
+import com.restapi.usermanagement.port.department.output.ListDepartmentsPaginatedPort;
 import com.restapi.usermanagement.port.department.output.UpdateDepartmentPort;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class DepartmentPersistence implements CreateDepartmentPort, FindDepartmentByIdPort, UpdateDepartmentPort {
+public class DepartmentPersistence
+        implements CreateDepartmentPort, FindDepartmentByIdPort, UpdateDepartmentPort, ListDepartmentsPaginatedPort {
     private final DepartmentMapper mapper;
     private final DepartmentRepository departmentRepository;
 
@@ -46,5 +51,16 @@ public class DepartmentPersistence implements CreateDepartmentPort, FindDepartme
 
         baseDepartment.setName(model.getName());
         return mapper.toModel(departmentRepository.save(baseDepartment));
+    }
+
+    @Override
+    public Page<DepartmentModel> findDepartmentList(Pageable page, Long departmentId, String departmentName) {
+        Page<DepartmentEntity> departments = departmentRepository.findList(departmentId, departmentName, page);
+
+        if (departments.getContent().isEmpty()) {
+            throw new NoSuchElementException("No department found.");
+        }
+
+        return new PageImpl<>(departments.stream().map(mapper::toModel).toList(), page, departments.getTotalElements());
     }
 }
