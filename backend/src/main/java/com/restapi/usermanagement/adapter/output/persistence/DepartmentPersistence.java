@@ -14,6 +14,7 @@ import com.restapi.usermanagement.adapter.output.database.repository.DepartmentR
 import com.restapi.usermanagement.domain.model.DepartmentModel;
 import com.restapi.usermanagement.domain.model.DepartmentRequestModel;
 import com.restapi.usermanagement.port.department.output.CreateDepartmentPort;
+import com.restapi.usermanagement.port.department.output.DeleteDepartmentPort;
 import com.restapi.usermanagement.port.department.output.FindDepartmentByIdPort;
 import com.restapi.usermanagement.port.department.output.ListDepartmentsPaginatedPort;
 import com.restapi.usermanagement.port.department.output.UpdateDepartmentPort;
@@ -23,7 +24,8 @@ import lombok.AllArgsConstructor;
 @Component
 @AllArgsConstructor
 public class DepartmentPersistence
-        implements CreateDepartmentPort, FindDepartmentByIdPort, UpdateDepartmentPort, ListDepartmentsPaginatedPort {
+        implements CreateDepartmentPort, FindDepartmentByIdPort, UpdateDepartmentPort, ListDepartmentsPaginatedPort,
+        DeleteDepartmentPort {
     private final DepartmentMapper mapper;
     private final DepartmentRepository departmentRepository;
 
@@ -62,5 +64,17 @@ public class DepartmentPersistence
         }
 
         return new PageImpl<>(departments.stream().map(mapper::toModel).toList(), page, departments.getTotalElements());
+    }
+
+    @Override
+    public void delete(Long departmentId) {
+        DepartmentEntity department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new NoSuchElementException("Department not found."));
+
+        if (!department.getUsers().isEmpty()) {
+            throw new DataConflictException("Department cannot be deleted because it has associated users.");
+        }
+
+        departmentRepository.deleteById(department.getId());
     }
 }
