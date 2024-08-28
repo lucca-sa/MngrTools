@@ -15,6 +15,8 @@ import { UserDto } from '../../../shared/models/user.model';
 import { DepartmentsService } from '../../../shared/services/departments.service';
 import { UsersService } from '../../../shared/services/users.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ApiError } from '../../../shared/models/api-error.model';
 
 @Component({
   selector: 'app-user-create-update-modal',
@@ -40,6 +42,7 @@ export class UserCreateUpdateModalComponent implements OnInit {
     private usersService: UsersService,
     private departmentsService: DepartmentsService,
     public dialogRef: MatDialogRef<UserCreateUpdateModalComponent>,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: { userId?: number }
   ) {
     this.userForm = this.fb.group({
@@ -106,14 +109,32 @@ export class UserCreateUpdateModalComponent implements OnInit {
     if (this.userForm.valid) {
       const userDto: UserDto = this.userForm.value;
       if (this.data?.userId) {
-        this.usersService
-          .updateUser(this.data.userId, userDto)
-          .subscribe(() => {
+        this.usersService.updateUser(this.data.userId, userDto).subscribe({
+          next: () => {
             this.dialogRef.close(true);
-          });
+            this.snackBar.open('User updated successfully', 'Close', {
+              duration: 3000,
+            });
+          },
+          error: (err: ApiError) => {
+            this.snackBar.open('Failed to update user', 'Close', {
+              duration: 3000,
+            });
+          },
+        });
       } else {
-        this.usersService.createUser(userDto).subscribe(() => {
-          this.dialogRef.close(true);
+        this.usersService.createUser(userDto).subscribe({
+          next: () => {
+            this.dialogRef.close(true);
+            this.snackBar.open('User created successfully', 'Close', {
+              duration: 3000,
+            });
+          },
+          error: (err: ApiError) => {
+            this.snackBar.open('Failed to create user', 'Close', {
+              duration: 3000,
+            });
+          },
         });
       }
     }
