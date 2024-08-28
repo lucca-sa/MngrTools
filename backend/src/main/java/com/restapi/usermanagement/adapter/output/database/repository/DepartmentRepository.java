@@ -15,6 +15,7 @@ public interface DepartmentRepository extends JpaRepository<DepartmentEntity, Lo
             SELECT d FROM DepartmentEntity d
             WHERE (:departmentId IS NULL OR d.id = :departmentId)
             AND (COALESCE(:departmentName, '') = '' OR LOWER(d.name) LIKE LOWER(CONCAT('%', COALESCE(CAST(:departmentName AS string), ''), '%')))
+            ORDER BY d.id ASC
             """)
     Page<DepartmentEntity> findList(
             @Param("departmentId") Long departmentId,
