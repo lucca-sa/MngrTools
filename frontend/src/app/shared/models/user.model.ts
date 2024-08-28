@@ -8,3 +8,11 @@ export interface User {
   address: string;
   department: Department;
 }
+
+export interface UserDto {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  departmentId: number;
+}

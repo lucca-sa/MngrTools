@@ -1,0 +1,21 @@
+.dialog-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.dialog-title {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.dialog-content {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}

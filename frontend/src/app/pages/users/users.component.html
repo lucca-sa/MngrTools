@@ -1,2 +1,10 @@
-<p>oi</p>
-<app-users-table></app-users-table>
+<div class="users-container">
+    <div class="header">
+        <h1>Users Management</h1>
+        <button mat-raised-button (click)="openCreateUserModal()">+ Add New User</button>
+    </div>
+
+    <div class="table-container">
+        <app-users-table></app-users-table>
+    </div>
+</div>

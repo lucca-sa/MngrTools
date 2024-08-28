@@ -1,0 +1,47 @@
+.modal-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal-container mat-form-field {
+    width: 100%;
+}
+
+.modal-container mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+
+.department-input-container {
+    max-width: 50%;
+}
+
+.department-container {
+    gap: 10px;
+
+    p {
+        margin: 0 0 3px 0;
+    }
+
+    .department-name-title {
+        font-size: 0.7rem;
+        font-weight: 300;
+    }
+
+    .department-name {
+        color: #00adb5;
+    }
+
+    .department-not-found {
+        color: red;
+        font-weight: bold;
+    }
+}
+
+mat-form-field {
+    margin-bottom: 10px;
+}

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedResponse } from '../models/paginated-response.model';
-import { User } from '../models/user.model';
+import { User, UserDto } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +11,14 @@ export class UsersService {
   private usersUrl = 'http://localhost:8080/api/user';
 
   constructor(private http: HttpClient) {}
+
+  createUser(user: UserDto): Observable<User> {
+    return this.http.post<User>(this.usersUrl, user);
+  }
+
+  getUserById(userId: number): Observable<User> {
+    return this.http.get<User>(`${this.usersUrl}/${userId}`);
+  }
 
   getUsers(
     page: number,
@@ -34,5 +42,13 @@ export class UsersService {
     }
 
     return this.http.get<PaginatedResponse<User>>(this.usersUrl, { params });
+  }
+
+  updateUser(userId: number, userDto: UserDto): Observable<User> {
+    return this.http.patch<User>(`${this.usersUrl}/${userId}`, userDto);
+  }
+
+  deleteUser(userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.usersUrl}/${userId}`);
   }
 }
