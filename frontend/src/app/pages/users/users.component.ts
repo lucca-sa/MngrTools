@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import { UsersTableComponent } from './users-table/users-table.component';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { UserCreateUpdateModalComponent } from './user-create-update-modal/user-create-update-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { UserCreateUpdateModalComponent } from './user-create-update-modal/user-create-update-modal.component';
 import { UserNotificationService } from '../../shared/services/user-notification.service';
+import { UsersTableComponent } from './users-table/users-table.component';
 
 @Component({
   selector: 'app-users',
@@ -16,11 +17,22 @@ import { UserNotificationService } from '../../shared/services/user-notification
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
+  departmentId: number | null = null;
+
   constructor(
     private dialog: MatDialog,
-    private userNotificationService: UserNotificationService
+    private userNotificationService: UserNotificationService,
+    private route: ActivatedRoute
   ) {}
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.departmentId = params['departmentId']
+        ? +params['departmentId']
+        : null;
+    });
+  }
 
   openCreateUserModal(): void {
     this.dialog

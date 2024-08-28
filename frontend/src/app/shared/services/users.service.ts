@@ -25,7 +25,8 @@ export class UsersService {
     size: number,
     userId?: number,
     userName?: string,
-    departmentName?: string
+    departmentName?: string,
+    departmentId?: number
   ): Observable<PaginatedResponse<User>> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -39,6 +40,9 @@ export class UsersService {
     }
     if (departmentName !== undefined) {
       params = params.set('departmentName', departmentName);
+    }
+    if (departmentId !== undefined) {
+      params = params.set('departmentId', departmentId);
     }
 
     return this.http.get<PaginatedResponse<User>>(this.usersUrl, { params });

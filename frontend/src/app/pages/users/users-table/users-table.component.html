@@ -1,18 +1,30 @@
-<div class="filters">
-  <mat-form-field>
-    <mat-label>User ID</mat-label>
-    <input matInput [(ngModel)]="filters.userId" (ngModelChange)="applyFilters()" type="number">
-  </mat-form-field>
+<div class="filters flex">
+  <div class="filters-inputs flex">
+    <mat-form-field>
+      <mat-label>User ID</mat-label>
+      <input matInput [(ngModel)]="filters.userId" (ngModelChange)="applyFilters()" type="number">
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>User Name</mat-label>
-    <input matInput [(ngModel)]="filters.userName" (ngModelChange)="applyFilters()">
-  </mat-form-field>
+    <mat-form-field>
+      <mat-label>User Name</mat-label>
+      <input matInput [(ngModel)]="filters.userName" (ngModelChange)="applyFilters()">
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Department Name</mat-label>
-    <input matInput [(ngModel)]="filters.departmentName" (ngModelChange)="applyFilters()">
-  </mat-form-field>
+    <mat-form-field>
+      <mat-label>Department Id</mat-label>
+      <input matInput [(ngModel)]="filters.departmentId" (ngModelChange)="applyFilters()" type="number">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Department Name</mat-label>
+      <input matInput [(ngModel)]="filters.departmentName" (ngModelChange)="applyFilters()">
+    </mat-form-field>
+  </div>
+
+  <div class="filters-buttons flex flex-center">
+    <button mat-icon-button class="clear-filters-button flex flex-center" [matTooltip]="'Clear Filters'"
+      matTooltipPosition="below" (click)="clearFilters()"><mat-icon>backspace</mat-icon></button>
+  </div>
 </div>
 
 <div class="mat-elevation-z8">

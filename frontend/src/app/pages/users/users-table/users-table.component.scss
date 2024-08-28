@@ -25,9 +25,16 @@ th.mat-header-cell {
 }
 
 .filters {
-    display: flex;
-    gap: 16px;
+    gap: 5px;
     margin-bottom: 16px;
+
+    .filters-inputs {
+        gap: 16px;
+    }
+
+    .filters-buttons {
+        height: 56px;
+    }
 
     mat-form-field {
         width: 200px;

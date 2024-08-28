@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Input } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -19,6 +19,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-users-table',
@@ -35,6 +36,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
     MatMenuModule,
     MatIconModule,
     ConfirmDialogComponent,
+    MatTooltipModule
   ],
   templateUrl: './users-table.component.html',
   styleUrls: ['./users-table.component.scss'],
@@ -57,6 +59,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
     userId: null as number | null,
     userName: '',
     departmentName: '',
+    departmentId: null as number | null,
   };
 
   private filterSubject = new Subject<void>();
@@ -65,6 +68,12 @@ export class UsersTableComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  @Input() set departmentId(departmentId: number | null) {
+    if (departmentId !== null) {
+      this.filters.departmentId = departmentId;
+    }
+  }
 
   constructor(
     private usersService: UsersService,
@@ -101,7 +110,10 @@ export class UsersTableComponent implements OnInit, OnDestroy {
         size,
         this.filters.userId !== null ? this.filters.userId : undefined,
         this.filters.userName,
-        this.filters.departmentName
+        this.filters.departmentName,
+        this.filters.departmentId !== null
+          ? this.filters.departmentId
+          : undefined
       )
       .subscribe({
         next: (response: PaginatedResponse<User>) => {
@@ -177,5 +189,16 @@ export class UsersTableComponent implements OnInit, OnDestroy {
         });
       },
     });
+  }
+
+  clearFilters() {
+    this.filters = {
+      userId: null,
+      userName: '',
+      departmentName: '',
+      departmentId: null,
+    };
+
+    this.loadUsers();
   }
 }

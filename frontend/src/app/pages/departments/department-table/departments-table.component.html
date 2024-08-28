@@ -1,13 +1,20 @@
-<div class="filters">
-  <mat-form-field>
-    <mat-label>Department ID</mat-label>
-    <input matInput [(ngModel)]="filters.departmentId" (ngModelChange)="applyFilters()" type="number">
-  </mat-form-field>
+<div class="filters flex">
+  <div class="filters-inputs flex">
+    <mat-form-field>
+      <mat-label>Department ID</mat-label>
+      <input matInput [(ngModel)]="filters.departmentId" (ngModelChange)="applyFilters()" type="number">
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Department Name</mat-label>
-    <input matInput [(ngModel)]="filters.departmentName" (ngModelChange)="applyFilters()">
-  </mat-form-field>
+    <mat-form-field>
+      <mat-label>Department Name</mat-label>
+      <input matInput [(ngModel)]="filters.departmentName" (ngModelChange)="applyFilters()">
+    </mat-form-field>
+  </div>
+
+  <div class="filters-buttons flex flex-center">
+    <button mat-icon-button class="clear-filters-button flex flex-center" [matTooltip]="'Clear Filters'"
+      matTooltipPosition="below" (click)="clearFilters()"><mat-icon>backspace</mat-icon></button>
+  </div>
 </div>
 
 <div class="mat-elevation-z8">
@@ -26,17 +33,22 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let department">
-        <button mat-icon-button [matMenuTriggerFor]="menu" [attr.disabled]="department.hasUsers ? true : null"
-          [matTooltip]="department.hasUsers ? 'This department has users and cannot be edited or deleted.' : ''"
-          matTooltipPosition="above">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>more_horiz</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="openEditModal(department.id)" [disabled]="department.hasUsers">
+          <button mat-menu-item (click)="openEditModal(department.id)" [disabled]="department.hasUsers"
+            [matTooltip]="department.hasUsers ? 'This department has users and cannot be edited.' : ''"
+            matTooltipPosition="above">
             Edit
           </button>
-          <button mat-menu-item (click)="confirmDelete(department.id)" [disabled]="department.hasUsers">
+          <button mat-menu-item (click)="confirmDelete(department.id)" [disabled]="department.hasUsers"
+            [matTooltip]="department.hasUsers ? 'This department has users and cannot be deleted.' : ''"
+            matTooltipPosition="above">
             Delete
+          </button>
+          <button mat-menu-item (click)="viewUsers(department.id)">
+            View Users
           </button>
         </mat-menu>
       </td>

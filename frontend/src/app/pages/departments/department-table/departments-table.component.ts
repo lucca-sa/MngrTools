@@ -23,6 +23,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DepartmentNotificationService } from '../../../shared/services/department-notification.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-departments-table',
@@ -39,7 +40,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatMenuModule,
     MatIconModule,
     ConfirmDialogComponent,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './departments-table.component.html',
   styleUrls: ['./departments-table.component.scss'],
@@ -66,7 +67,8 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
     private departmentsService: DepartmentsService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private departmentNotificationService: DepartmentNotificationService
+    private departmentNotificationService: DepartmentNotificationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -145,6 +147,10 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  viewUsers(departmentId: number): void {
+    this.router.navigate(['/users'], { queryParams: { departmentId } });
+  }
+
   confirmDelete(departmentId: number): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -174,5 +180,14 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
         });
       },
     });
+  }
+
+  clearFilters() {
+    this.filters = {
+      departmentId: null,
+      departmentName: '',
+    };
+
+    this.loadDepartments();
   }
 }
