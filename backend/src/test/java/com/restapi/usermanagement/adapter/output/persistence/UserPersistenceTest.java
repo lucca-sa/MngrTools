@@ -52,11 +52,9 @@ public class UserPersistenceTest {
         public void testFindUserInfo_Success() {
                 Long userId = 1L;
                 UserEntity userEntity = new UserEntity(userId, "John Doe", "john.doe@example.com", "1234567890",
-                                "123 Main St",
-                                null);
+                                "123 Main St", null);
                 UserModel userModel = new UserModel(userId, "John Doe", "john.doe@example.com", "1234567890",
-                                "123 Main St",
-                                null);
+                                "123 Main St", null);
 
                 when(userRepository.findById(userId)).thenReturn(Optional.of(userEntity));
                 when(userMapper.toModel(userEntity)).thenReturn(userModel);
@@ -83,8 +81,7 @@ public class UserPersistenceTest {
                                 "123 Main St", 1L);
                 DepartmentEntity departmentEntity = new DepartmentEntity(1L, "HR", null);
                 UserEntity userEntity = new UserEntity(null, "John Doe", "john.doe@example.com", "1234567890",
-                                "123 Main St",
-                                departmentEntity);
+                                "123 Main St", departmentEntity);
                 UserModel userModel = new UserModel(1L, "John Doe", "john.doe@example.com", "1234567890", "123 Main St",
                                 new DepartmentModel(1L, "HR"));
 
@@ -121,11 +118,9 @@ public class UserPersistenceTest {
                                 "456 Another St", null);
                 DepartmentEntity departmentEntity = new DepartmentEntity(1L, "HR", null);
                 UserEntity updatedUser = new UserEntity(userId, "John Doe", "john.doe@example.com", "1234567890",
-                                "123 Main St",
-                                departmentEntity);
+                                "123 Main St", departmentEntity);
                 UserModel userModel = new UserModel(userId, "John Doe", "john.doe@example.com", "1234567890",
-                                "123 Main St",
-                                new DepartmentModel(1L, "HR"));
+                                "123 Main St", new DepartmentModel(1L, "HR"));
 
                 when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
                 when(departmentRepository.findById(1L)).thenReturn(Optional.of(departmentEntity));
@@ -185,12 +180,12 @@ public class UserPersistenceTest {
                                 null);
                 Page<UserEntity> userPage = new PageImpl<>(List.of(userEntity), pageable, 1);
 
-                when(userRepository.findList(null, null, null, pageable)).thenReturn(userPage);
+                when(userRepository.findList(null, null, null, null, pageable)).thenReturn(userPage);
                 when(userMapper.toModel(userEntity)).thenReturn(userModel);
 
-                Page<UserModel> result = userPersistence.findUserList(pageable, null, null, null);
+                Page<UserModel> result = userPersistence.findUserList(pageable, null, null, null, null);
 
-                verify(userRepository).findList(null, null, null, pageable);
+                verify(userRepository).findList(null, null, null, null, pageable);
                 assertEquals(1, result.getTotalElements());
                 assertEquals(userModel, result.getContent().get(0));
         }
@@ -200,10 +195,10 @@ public class UserPersistenceTest {
                 Pageable pageable = PageRequest.of(0, 10);
                 Page<UserEntity> emptyPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
 
-                when(userRepository.findList(null, null, null, pageable)).thenReturn(emptyPage);
+                when(userRepository.findList(null, null, null, null, pageable)).thenReturn(emptyPage);
 
                 assertThrows(NoSuchElementException.class,
-                                () -> userPersistence.findUserList(pageable, null, null, null));
+                                () -> userPersistence.findUserList(pageable, null, null, null, null));
         }
 
         @Test
@@ -215,16 +210,14 @@ public class UserPersistenceTest {
                                 null);
                 Page<UserEntity> userPage = new PageImpl<>(List.of(userEntity), pageable, 1);
 
-                Long userId = 1L;
-                String userName = "John";
-                String departmentName = "HR";
-
-                when(userRepository.findList(userId, userName, departmentName, pageable)).thenReturn(userPage);
+                when(userRepository.findList(1L, "John Doe", "1234567890", 1L, pageable))
+                                .thenReturn(userPage);
                 when(userMapper.toModel(userEntity)).thenReturn(userModel);
 
-                Page<UserModel> result = userPersistence.findUserList(pageable, userId, userName, departmentName);
+                Page<UserModel> result = userPersistence.findUserList(pageable, 1L, "John Doe",
+                                "1234567890", 1L);
 
-                verify(userRepository).findList(userId, userName, departmentName, pageable);
+                verify(userRepository).findList(1L, "John Doe", "1234567890", 1L, pageable);
                 assertEquals(1, result.getTotalElements());
                 assertEquals(userModel, result.getContent().get(0));
         }

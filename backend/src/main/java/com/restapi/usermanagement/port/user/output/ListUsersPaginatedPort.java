@@ -6,5 +6,6 @@ import org.springframework.data.domain.Pageable;
 import com.restapi.usermanagement.domain.model.UserModel;
 
 public interface ListUsersPaginatedPort {
-    Page<UserModel> findUserList(Pageable page, Long userId, String userName, String departmentName);
+    Page<UserModel> findUserList(Pageable page, Long userId, String userName, String departmentName,
+            Long departmentId);
 }

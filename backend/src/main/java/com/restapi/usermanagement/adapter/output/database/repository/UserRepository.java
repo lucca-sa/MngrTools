@@ -12,16 +12,18 @@ import com.restapi.usermanagement.adapter.output.database.entity.UserEntity;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query("""
-        SELECT u FROM UserEntity u
-        LEFT JOIN u.department d
-        WHERE (:userId IS NULL OR u.id = :userId)
-        AND (COALESCE(:userName, '') = '' OR LOWER(u.name) LIKE LOWER(CONCAT('%', COALESCE(CAST(:userName AS string), ''), '%')))
-        AND (COALESCE(:departmentName, '') = '' OR LOWER(d.name) LIKE LOWER(CONCAT('%', COALESCE(CAST(:departmentName AS string), ''), '%')))
-        ORDER BY u.id ASC
-    """)
+                SELECT u FROM UserEntity u
+                LEFT JOIN u.department d
+                WHERE (:userId IS NULL OR u.id = :userId)
+                AND (:departmentId IS NULL OR d.id = :departmentId)
+                AND (COALESCE(:userName, '') = '' OR LOWER(u.name) LIKE LOWER(CONCAT('%', COALESCE(CAST(:userName AS string), ''), '%')))
+                AND (COALESCE(:departmentName, '') = '' OR LOWER(d.name) LIKE LOWER(CONCAT('%', COALESCE(CAST(:departmentName AS string), ''), '%')))
+                ORDER BY u.id ASC
+            """)
     Page<UserEntity> findList(
-        @Param("userId") Long userId,
-        @Param("userName") String userName,
-        @Param("departmentName") String departmentName,
-        Pageable pageable);
+            @Param("userId") Long userId,
+            @Param("userName") String userName,
+            @Param("departmentName") String departmentName,
+            @Param("departmentId") Long departmentId,
+            Pageable pageable);
 }

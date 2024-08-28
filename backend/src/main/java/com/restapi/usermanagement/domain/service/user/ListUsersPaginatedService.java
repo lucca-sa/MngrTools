@@ -18,8 +18,9 @@ public class ListUsersPaginatedService implements ListUsersPaginatedUseCase {
     }
 
     @Override
-    public PaginationResponseModel findUserList(Pageable page, Long userId, String userName, String departmentName) {
-        Page<UserModel> users = port.findUserList(page, userId, userName, departmentName);
+    public PaginationResponseModel findUserList(Pageable page, Long userId, String userName, String departmentName,
+            Long departmentId) {
+        Page<UserModel> users = port.findUserList(page, userId, userName, departmentName, departmentId);
 
         return new PaginationResponseModel(users.getNumber(), users.getTotalElements(), users.getTotalPages(),
                 users.getContent());

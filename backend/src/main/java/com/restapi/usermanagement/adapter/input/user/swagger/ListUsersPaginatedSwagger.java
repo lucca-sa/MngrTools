@@ -14,14 +14,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Users")
 public interface ListUsersPaginatedSwagger {
-    @Operation(summary = "List Users Paginated")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User found", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = PaginationResponseDTO.class))),
-            @ApiResponse(description = "Error", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ErrorResponse.class))),
+        @Operation(summary = "List Users Paginated")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "User found", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = PaginationResponseDTO.class))),
+                        @ApiResponse(description = "Error", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ErrorResponse.class))),
 
-    })
-    public PaginationResponseDTO getUserList(@PageableDefault(page = 0, size = 10) Pageable page,
-            @RequestParam(required = false) Long userId,
-            @RequestParam(required = false) String userName,
-            @RequestParam(required = false) String departmentName);
+        })
+        public PaginationResponseDTO getUserList(@PageableDefault(page = 0, size = 10) Pageable page,
+                        @RequestParam(required = false) Long userId,
+                        @RequestParam(required = false) String userName,
+                        @RequestParam(required = false) String departmentName,
+                        @RequestParam(required = false) Long departmentId);
 }

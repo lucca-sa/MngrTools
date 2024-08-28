@@ -28,7 +28,8 @@ public class ListUsersPaginatedController implements ListUsersPaginatedSwagger {
     public PaginationResponseDTO getUserList(@PageableDefault(page = 0, size = 10) Pageable page,
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) String userName,
-            @RequestParam(required = false) String departmentName) {
-        return mapper.toResponseDTO(useCase.findUserList(page, userId, userName, departmentName));
+            @RequestParam(required = false) String departmentName,
+            @RequestParam(required = false) Long departmentId) {
+        return mapper.toResponseDTO(useCase.findUserList(page, userId, userName, departmentName, departmentId));
     }
 }

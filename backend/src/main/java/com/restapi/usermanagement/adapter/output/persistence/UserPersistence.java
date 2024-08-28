@@ -73,8 +73,9 @@ public class UserPersistence
     }
 
     @Override
-    public Page<UserModel> findUserList(Pageable page, Long userId, String userName, String departmentName) {
-        Page<UserEntity> users = userRepository.findList(userId, userName, departmentName, page);
+    public Page<UserModel> findUserList(Pageable page, Long userId, String userName, String departmentName,
+            Long departmentId) {
+        Page<UserEntity> users = userRepository.findList(userId, userName, departmentName, departmentId, page);
 
         if (users.getContent().isEmpty()) {
             throw new NoSuchElementException("No users found.");
