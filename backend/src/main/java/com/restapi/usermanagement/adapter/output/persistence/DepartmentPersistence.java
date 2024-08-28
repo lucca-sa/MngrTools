@@ -11,6 +11,7 @@ import com.restapi.usermanagement.adapter.exception.customs.DataConflictExceptio
 import com.restapi.usermanagement.adapter.mapper.DepartmentMapper;
 import com.restapi.usermanagement.adapter.output.database.entity.DepartmentEntity;
 import com.restapi.usermanagement.adapter.output.database.repository.DepartmentRepository;
+import com.restapi.usermanagement.domain.model.DepartmentListModel;
 import com.restapi.usermanagement.domain.model.DepartmentModel;
 import com.restapi.usermanagement.domain.model.DepartmentRequestModel;
 import com.restapi.usermanagement.port.department.output.CreateDepartmentPort;
@@ -56,14 +57,15 @@ public class DepartmentPersistence
     }
 
     @Override
-    public Page<DepartmentModel> findDepartmentList(Pageable page, Long departmentId, String departmentName) {
+    public Page<DepartmentListModel> findDepartmentList(Pageable page, Long departmentId, String departmentName) {
         Page<DepartmentEntity> departments = departmentRepository.findList(departmentId, departmentName, page);
 
         if (departments.getContent().isEmpty()) {
             throw new NoSuchElementException("No department found.");
         }
 
-        return new PageImpl<>(departments.stream().map(mapper::toModel).toList(), page, departments.getTotalElements());
+        return new PageImpl<>(departments.stream().map(mapper::toListModel).toList(), page,
+                departments.getTotalElements());
     }
 
     @Override

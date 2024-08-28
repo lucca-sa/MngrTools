@@ -23,6 +23,7 @@ import com.restapi.usermanagement.adapter.mapper.DepartmentMapper;
 import com.restapi.usermanagement.adapter.output.database.entity.DepartmentEntity;
 import com.restapi.usermanagement.adapter.output.database.entity.UserEntity;
 import com.restapi.usermanagement.adapter.output.database.repository.DepartmentRepository;
+import com.restapi.usermanagement.domain.model.DepartmentListModel;
 import com.restapi.usermanagement.domain.model.DepartmentModel;
 import com.restapi.usermanagement.domain.model.DepartmentRequestModel;
 
@@ -144,16 +145,18 @@ public class DepartmentPersistenceTest {
     public void testFindDepartmentList_Success() {
         Pageable pageable = Pageable.ofSize(10).withPage(0);
         DepartmentEntity departmentEntity = new DepartmentEntity(1L, "HR", null);
+        DepartmentListModel departmentListModel = new DepartmentListModel(1L, "HR", false);
         Page<DepartmentEntity> departmentPage = new PageImpl<>(List.of(departmentEntity), pageable, 1);
 
         when(departmentRepository.findList(1L, "HR", pageable)).thenReturn(departmentPage);
-        when(departmentMapper.toModel(departmentEntity)).thenReturn(new DepartmentModel(1L, "HR"));
+        when(departmentMapper.toListModel(departmentEntity)).thenReturn(departmentListModel);
 
-        Page<DepartmentModel> result = departmentPersistence.findDepartmentList(pageable, 1L, "HR");
+        Page<DepartmentListModel> result = departmentPersistence.findDepartmentList(pageable, 1L, "HR");
 
         verify(departmentRepository).findList(1L, "HR", pageable);
         assertEquals(1, result.getTotalElements());
         assertEquals("HR", result.getContent().get(0).getName());
+        assertEquals(false, result.getContent().get(0).getHasUsers());
     }
 
     @Test
@@ -165,5 +168,4 @@ public class DepartmentPersistenceTest {
 
         assertThrows(NoSuchElementException.class, () -> departmentPersistence.findDepartmentList(pageable, 1L, "HR"));
     }
-
 }
