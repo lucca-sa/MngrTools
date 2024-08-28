@@ -24,9 +24,15 @@
     }
 
     .add-user-button {
-        font-size: 14px;
-        padding: 10px 20px;
-        color: white;
-        border-radius: 5px;
+        font-size: 16px;
+        padding: 12px 24px;
+        color: #ffffff;
+        border: 1px solid #00adb5;
+        border-radius: 8px;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .add-user-button:hover {
+        background-color: #00adb5;
     }
 }
