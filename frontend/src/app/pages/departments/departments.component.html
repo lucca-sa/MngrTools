@@ -1,1 +1,11 @@
-<p>departments works!</p>
+<div class="department-container">
+    <div class="header">
+        <h1>Department Management</h1>
+        <button mat-raised-button class="add-department-button" (click)="openCreateDepartmentModal()">+ Add New
+            Department</button>
+    </div>
+
+    <div class="table-container">
+        <app-departments-table></app-departments-table>
+    </div>
+</div>

@@ -53,9 +53,10 @@
       </div>
     </div>
 
-    <div mat-dialog-actions>
-      <button mat-button type="button" (click)="close()">Cancel</button>
-      <button mat-button type="submit" [disabled]="userForm.invalid || departmentNotFound">Save</button>
+    <div mat-dialog-actions class="button-container flex">
+      <button mat-raised-button type="button" color="warn" (click)="close()">Cancel</button>
+      <button mat-raised-button type="submit" color="primary"
+        [disabled]="userForm.invalid || departmentNotFound">Save</button>
     </div>
   </form>
 </div>
