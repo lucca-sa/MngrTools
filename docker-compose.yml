@@ -3,9 +3,9 @@ services:
     image: postgres:14
     container_name: postgres
     environment:
-      POSTGRES_DB: usermanagement_db
-      POSTGRES_USER: usermanagement_user
-      POSTGRES_PASSWORD: usermanagement_password
+      POSTGRES_DB: mngrtools_db
+      POSTGRES_USER: mngrtools_user
+      POSTGRES_PASSWORD: mngrtools_password
     ports:
       - "5432:5432"
     volumes:
@@ -16,9 +16,9 @@ services:
       context: ./backend
     container_name: backend
     environment:
-      DB_SERVER_URL: jdbc:postgresql://postgres:5432/usermanagement_db
-      DB_USER: usermanagement_user
-      DB_PASSWORD: usermanagement_password
+      DB_SERVER_URL: jdbc:postgresql://postgres:5432/mngrtools_db
+      DB_USER: mngrtools_user
+      DB_PASSWORD: mngrtools_password
     ports:
       - "8080:8080"
     depends_on:
