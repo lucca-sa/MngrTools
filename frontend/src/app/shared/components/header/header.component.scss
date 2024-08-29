@@ -3,7 +3,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 16px;
-    background-color: #191c1c;
+    background: linear-gradient(to right, #191c1c 20%, #00adb5);
     color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     border-bottom: 2px solid #00adb5;
@@ -22,7 +22,7 @@
             transition: color 0.3s;
 
             &.active {
-                border-bottom: 2px solid #00adb5;
+                border-bottom: 2px solid #ffffff;
             }
 
             &:hover {
