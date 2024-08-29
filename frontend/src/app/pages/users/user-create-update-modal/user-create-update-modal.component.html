@@ -1,5 +1,5 @@
-<div class="modal-container">
-  <h2 mat-dialog-title>{{ data?.userId ? 'Edit User' : 'Create New User' }}</h2>
+<div class="modal-container flex">
+  <h2 class="modal-title" mat-dialog-title>{{ data?.userId ? 'Edit User' : 'Create New User' }}</h2>
   <form [formGroup]="userForm" (ngSubmit)="save()">
     <mat-form-field>
       <mat-label>Name</mat-label>
@@ -53,10 +53,10 @@
       </div>
     </div>
 
-    <div mat-dialog-actions class="button-container flex">
-      <button mat-raised-button type="button" color="warn" (click)="close()">Cancel</button>
+    <div mat-dialog-actions class="button-container flex flex-center">
       <button mat-raised-button type="submit" color="primary"
         [disabled]="userForm.invalid || departmentNotFound">Save</button>
+      <button mat-raised-button type="button" color="warn" (click)="close()">Cancel</button>
     </div>
   </form>
 </div>

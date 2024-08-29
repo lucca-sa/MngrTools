@@ -76,3 +76,10 @@ th.mat-header-cell {
         width: 200px;
     }
 }
+
+/*Create and Update Modals Styles*/
+h2[mat-dialog-title] {
+    color: #00adb5;
+    font-size: 1.5rem;
+    margin: 0 auto;
+}

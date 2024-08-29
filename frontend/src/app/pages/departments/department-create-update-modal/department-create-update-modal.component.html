@@ -9,9 +9,9 @@
                 characters.</mat-error>
         </mat-form-field>
 
-        <div mat-dialog-actions class="button-container flex">
-            <button mat-raised-button type="button" color="warn" (click)="close()">Cancel</button>
+        <div mat-dialog-actions class="button-container flex flex-center">
             <button mat-raised-button type="submit" color="primary" [disabled]="departmentForm.invalid">Save</button>
+            <button mat-raised-button type="button" color="warn" (click)="close()">Cancel</button>
         </div>
     </form>
 </div>
